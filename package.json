@@ -1,0 +1,22 @@
+{
+  "name": "comparing-orm",
+  "version": "1.0.0",
+  "description": "Comparing performance ORM typescript with PostgreSQL",
+  "main": "index.ts",
+  "scripts": {
+    "test": "ts-node src/benchmark.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^9.5.0",
+    "@prisma/client": "^6.3.1",
+    "@types/node": "^22.13.4",
+    "knex": "^3.1.0",
+    "pg": "^8.13.3",
+    "sequelize": "^6.37.5",
+    "ts-node": "^10.9.2",
+    "typeorm": "^0.3.20",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,33 @@
+services:
+  db_test:
+    image: postgres:17
+    shm_size: 1g
+    container_name: db_test
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data
+      TS_TUNE_MAX_CONNS: 100
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "6433:5432"
+
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: orm_test_app
+    restart: always
+    depends_on:
+      - db_test
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+    volumes:
+      - .:/app
+    working_dir: /app
