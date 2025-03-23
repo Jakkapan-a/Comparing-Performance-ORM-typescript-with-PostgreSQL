@@ -27,7 +27,7 @@ services:
       resources:
         limits:
           cpus: '1'
-          memory: 512M
+          memory: 1G
     volumes:
       - .:/app
     working_dir: /app
