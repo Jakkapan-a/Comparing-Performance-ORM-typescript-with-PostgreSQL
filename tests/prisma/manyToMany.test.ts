@@ -15,12 +15,13 @@ describe("Many to Many: User - Group", () => {
     });
 
     afterAll(async () => {
+        // Disconnect Prisma client
         await prisma.$disconnect();
     });
 
 
     RUN_ROWS.forEach((rows) => {
-        // Create
+        // CRUD operations for users and groups
         describe(`CRUD ${rows} users and assign to groups`, () => {
           const fakeUsers: { name: string; email: string; groupIds: number[] }[] = [];
           let groupIds: number[] = [];
@@ -44,7 +45,7 @@ describe("Many to Many: User - Group", () => {
             }
           });
 
-          
+          // Create: should insert users and link to groups
           it(`Create: should insert ${rows} users and link to groups`, async () => {
             const queryCount = setupQueryCounter();
             console.log(`--- INSERT (${rows}) ---`);
@@ -68,6 +69,7 @@ describe("Many to Many: User - Group", () => {
             expect(createdUsers.length).toBe(rows);
           }, 300000);
     
+          // Read: should fetch all users with groups
           it(`Read: should fetch all ${rows} users with groups`, async () => {
             const queryCount = setupQueryCounter();
             console.log(`--- READ (${rows}) ---`);
@@ -82,6 +84,7 @@ describe("Many to Many: User - Group", () => {
             expect(users.length).toBe(rows);
           }, 300000);
     
+          // Update: should update users' group association
           it(`Update: should update users' group association`, async () => {
             const queryCount = setupQueryCounter();
             console.log(`--- UPDATE (${rows}) ---`);

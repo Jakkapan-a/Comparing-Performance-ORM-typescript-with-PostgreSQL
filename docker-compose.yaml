@@ -1,7 +1,7 @@
 services:
   db_test:
     image: postgres:17
-    shm_size: 1g
+    # shm_size: 1g
     container_name: db_test
     restart: always
     environment:
@@ -9,7 +9,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       PGDATA: /var/lib/postgresql/data
-      TS_TUNE_MAX_CONNS: 100
+      # TS_TUNE_MAX_CONNS: 100
     volumes:
       - ./data:/var/lib/postgresql/data
     ports:
