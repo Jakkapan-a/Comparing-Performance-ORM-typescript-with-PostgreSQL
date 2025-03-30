@@ -4,7 +4,7 @@
   "description": "Comparing performance ORM typescript with PostgreSQL",
   "main": "index.ts",
   "scripts": {
-    "test": "ts-node src/benchmark.ts"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -19,5 +19,10 @@
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.20",
     "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.14",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.6"
   }
 }

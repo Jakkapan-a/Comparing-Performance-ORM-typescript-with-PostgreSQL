@@ -10,7 +10,7 @@
     "outDir": "./dist",
     "esModuleInterop": true,
     "strict": true,
-    "types": ["node"],
+    "types": ["node", "jest"],
     "skipLibCheck": true
   },
   "include": ["src/**/*.ts"],

@@ -15,19 +15,19 @@ services:
     ports:
       - "6433:5432"
 
-  app:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    container_name: orm_test_app
-    restart: always
-    depends_on:
-      - db_test
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1G
-    volumes:
-      - .:/app
-    working_dir: /app
+  # app:
+  #   build: 
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   container_name: orm_test_app
+  #   restart: always
+  #   depends_on:
+  #     - db_test
+  #   deploy:
+  #     resources:
+  #       limits:
+  #         cpus: '1'
+  #         memory: 1G
+  #   volumes:
+  #     - .:/app
+  #   working_dir: /app
