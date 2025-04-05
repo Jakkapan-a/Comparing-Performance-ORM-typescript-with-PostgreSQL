@@ -1,7 +1,7 @@
 import { prisma, setupQueryCounter } from "../prisma/config";
 import { de, fa, faker } from "@faker-js/faker";
 
-const RUN_ROWS = [1000, 5000];
+const RUN_ROWS = [100, 1000, 5000];
 // const RUN_ROWS = [1];
 
 describe("Many to One: Post - Category", () => {

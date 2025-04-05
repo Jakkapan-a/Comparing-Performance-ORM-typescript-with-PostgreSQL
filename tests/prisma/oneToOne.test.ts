@@ -2,7 +2,7 @@
 import { prisma, setupQueryCounter } from "../prisma/config";
 import { faker } from "@faker-js/faker";
 
-const RUN_ROWS = [1000, 5000, 10000];
+const RUN_ROWS = [100, 1000, 5000];
 // const RUN_ROWS = [1];
 describe("One-to-One: User - Profile", () => {
   beforeAll(async () => {
