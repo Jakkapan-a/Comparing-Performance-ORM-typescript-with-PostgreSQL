@@ -1,4 +1,4 @@
-import { prisma, setupQueryCounter } from "../prisma/config";
+import { getMemoryUsageMB, prisma, setupQueryCounter } from "../prisma/config";
 import { de, fa, faker } from "@faker-js/faker";
 
 const RUN_ROWS = [100, 1000, 5000];
@@ -60,6 +60,9 @@ describe("Many to One: Post - Category", () => {
             it(`Create: should create ${rows} posts with categories and authors`, async () => {
               const queryCount = setupQueryCounter();
               console.time(`Insert ${rows} posts`);
+
+              const memStart = getMemoryUsageMB();
+              const cpuStart = process.cpuUsage();
       
               for (let post of fakePosts) {
                 const created = await prisma.post.create({
@@ -79,27 +82,47 @@ describe("Many to One: Post - Category", () => {
               }
       
               console.timeEnd(`Insert ${rows} posts`);
+              
+              const memEnd = getMemoryUsageMB();
+              const cpuEnd = process.cpuUsage(cpuStart);
+
               console.log(`Query Count: ${queryCount()}`);
+              console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+              console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
+              
               expect(postIds.length).toBe(rows);
             }, 500000);
       
             it(`Read: should fetch all ${rows} posts with category`, async () => {
               const queryCount = setupQueryCounter();
               console.time(`Read ${rows} posts`);
+
+              const memStart = getMemoryUsageMB();
+              const cpuStart = process.cpuUsage();
       
               const posts = await prisma.post.findMany({
                 include: { category: true, author: true },
               });
       
               console.timeEnd(`Read ${rows} posts`);
+              
+              const memEnd = getMemoryUsageMB();
+              const cpuEnd = process.cpuUsage(cpuStart);
+
               console.log(`Query Count: ${queryCount()}`);
+              console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+              console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
+
               expect(posts.length).toBe(rows);
             }, 100000);
       
             it(`Update: should update title and category for ${rows} posts`, async () => {
               const queryCount = setupQueryCounter();
               console.time(`Update ${rows} posts`);
-      
+    
+              const memStart = getMemoryUsageMB();
+              const cpuStart = process.cpuUsage();
+
               for (let i = 0; i < postIds.length; i++) {
                 const newCategoryId = categoryIds[(i + 1) % categoryIds.length];
                 await prisma.post.update({
@@ -114,7 +137,14 @@ describe("Many to One: Post - Category", () => {
               }
       
               console.timeEnd(`Update ${rows} posts`);
+              
+              const memEnd = getMemoryUsageMB();
+              const cpuEnd = process.cpuUsage(cpuStart);
+
               console.log(`Query Count: ${queryCount()}`);
+              console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+              console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
+              
               expect(true).toBe(true);
             }, 500000);
       

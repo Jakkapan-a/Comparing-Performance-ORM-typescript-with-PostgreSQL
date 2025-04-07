@@ -1,5 +1,5 @@
 // 
-import { prisma, setupQueryCounter } from "../prisma/config";
+import { getMemoryUsageMB, prisma, setupQueryCounter } from "../prisma/config";
 import { de, faker } from "@faker-js/faker";
 
 const RUN_ROWS = [100, 1000, 5000];
@@ -50,6 +50,9 @@ describe("Many to Many: User - Group", () => {
             const queryCount = setupQueryCounter();
             console.log(`--- INSERT (${rows}) ---`);
             console.time(`Insert ${rows} users`);
+            
+            const memStart = getMemoryUsageMB();
+            const cpuStart = process.cpuUsage();
     
             for (let user of fakeUsers) {
               const result = await prisma.user.create({
@@ -65,7 +68,14 @@ describe("Many to Many: User - Group", () => {
             }
     
             console.timeEnd(`Insert ${rows} users`);
+            
+            const memEnd = getMemoryUsageMB();
+            const cpuEnd = process.cpuUsage(cpuStart);
+
             console.log(`Query Count: ${queryCount()}`);
+            console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+            console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
+            
             expect(createdUsers.length).toBe(rows);
           }, 300000);
     
@@ -74,13 +84,24 @@ describe("Many to Many: User - Group", () => {
             const queryCount = setupQueryCounter();
             console.log(`--- READ (${rows}) ---`);
             console.time(`Read ${rows} users`);
+
+            const memStart = getMemoryUsageMB();
+            const cpuStart = process.cpuUsage();
     
             const users = await prisma.user.findMany({
               include: { groups: true },
             });
     
             console.timeEnd(`Read ${rows} users`);
+            
+            
+            const memEnd = getMemoryUsageMB();
+            const cpuEnd = process.cpuUsage(cpuStart);
+
             console.log(`Query Count: ${queryCount()}`);
+            console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+            console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
+            
             expect(users.length).toBe(rows);
           }, 300000);
     
@@ -90,6 +111,9 @@ describe("Many to Many: User - Group", () => {
             console.log(`--- UPDATE (${rows}) ---`);
             console.time(`Update ${rows} users`);
     
+            const memStart = getMemoryUsageMB();
+            const cpuStart = process.cpuUsage();
+
             for (let i = 0; i < createdUsers.length; i++) {
               const user = createdUsers[i];
               const newGroupId = groupIds[(i + 1) % 3]; // เปลี่ยนกลุ่ม
@@ -105,7 +129,14 @@ describe("Many to Many: User - Group", () => {
             }
 
             console.timeEnd(`Update ${rows} users`);
+            
+            const memEnd = getMemoryUsageMB();
+            const cpuEnd = process.cpuUsage(cpuStart);
+
             console.log(`Query Count: ${queryCount()}`);
+            console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+            console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
+            
             expect(true).toBe(true);
           }, 300000);
     
@@ -114,11 +145,21 @@ describe("Many to Many: User - Group", () => {
             console.log(`--- DELETE (${rows}) ---`);
             console.time(`Delete ${rows} users`);
 
+            const memStart = getMemoryUsageMB();
+            const cpuStart = process.cpuUsage();
+
             await prisma.user.deleteMany();    
             const remaining = await prisma.user.count();
             
             console.timeEnd(`Delete ${rows} users`);
+            
+            const memEnd = getMemoryUsageMB();
+            const cpuEnd = process.cpuUsage(cpuStart);
+
             console.log(`Query Count: ${queryCount()}`);
+            console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+            console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
+            
             expect(remaining).toBe(0);
           }, 300000);
           
