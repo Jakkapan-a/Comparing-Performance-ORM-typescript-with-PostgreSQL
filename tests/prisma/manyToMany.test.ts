@@ -2,7 +2,7 @@
 import { prisma, setupQueryCounter } from "../prisma/config";
 import { de, faker } from "@faker-js/faker";
 
-const RUN_ROWS = [1000, 5000, 10000];
+const RUN_ROWS = [100, 1000, 5000];
 // const RUN_ROWS = [1];
 
 describe("Many to Many: User - Group", () => {
