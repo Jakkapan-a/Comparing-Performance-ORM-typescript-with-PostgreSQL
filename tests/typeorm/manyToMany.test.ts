@@ -5,14 +5,16 @@ import { Group } from "../../src/entity/Group";
 
 let queryCount = 0;
 const setupQueryCounter = () => {
-  const originalQuery = AppDataSource.driver.connect().then();
-  // @ts-ignore
   queryCount = 0;
-  // @ts-ignore
-  AppDataSource.driver.connection.query = async function (...args: any[]) {
-    queryCount++;
-    return originalQuery;
+  const logger = {
+    logQuery: () => queryCount++,
+    logQueryError: () => {},
+    logQuerySlow: () => {},
+    logSchemaBuild: () => {},
+    logMigration: () => {},
+    log: () => {},
   };
+  (AppDataSource as any).logger = logger;
   return () => queryCount;
 };
 

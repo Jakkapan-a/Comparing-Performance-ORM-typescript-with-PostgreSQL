@@ -19,7 +19,7 @@ import {
     @Column({ unique: true })
     email!: string;
   
-    @OneToMany(() => Post, post => post.author)
+    @OneToMany(() => Post, post => post.author, { cascade: true , eager: true})
     posts!: Post[];
   
     @OneToOne(() => Profile, profile => profile.user, { cascade: true })
