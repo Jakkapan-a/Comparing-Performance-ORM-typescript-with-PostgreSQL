@@ -1,4 +1,4 @@
-// 
+// tests/prisma/manyToMany.test.ts
 import { prisma, setupQueryCounter } from "../prisma/config";
 import { de, faker } from "@faker-js/faker";
 import { getMemoryUsageMB } from "../utils/memory";
