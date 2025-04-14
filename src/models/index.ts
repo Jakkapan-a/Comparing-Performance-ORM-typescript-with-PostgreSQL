@@ -9,7 +9,7 @@ import { UserGroup } from "./UserGroup";
 
 let queryCount = 0;
 
-export const logging = (sql: string) => {
+export const logging = (sql: string, timing?: any) => {
   queryCount++;
   console.log(`[SQL ${queryCount}]`, sql);
 };
