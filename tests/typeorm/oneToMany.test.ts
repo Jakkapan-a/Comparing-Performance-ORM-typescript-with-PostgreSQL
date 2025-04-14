@@ -2,8 +2,7 @@ import { faker } from "@faker-js/faker";
 import { AppDataSource } from "../../src/data-source";
 import { User } from "../../src/entity/User";
 import { Post } from "../../src/entity/Post";
-import { getMemoryUsageMB } from "../prisma/config";
-
+import { getMemoryUsageMB } from "../utils/memory";
 // const RUN_ROWS = [100, 1000, 5000];
 const RUN_ROWS = [1];
 

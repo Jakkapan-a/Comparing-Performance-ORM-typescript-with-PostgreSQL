@@ -1,7 +1,7 @@
 // src/entity/Profile.ts
 import {
     Entity, PrimaryGeneratedColumn, Column,
-    OneToOne, JoinColumn
+    OneToOne
   } from "typeorm";
   import { User } from "./User";
   
@@ -13,10 +13,9 @@ import {
     @Column({ nullable: true })
     bio!: string;
   
-    @OneToOne(() => User, user => user.profile, {
-      onDelete: "CASCADE"
+    @OneToOne(() => User, {
+      onDelete: "CASCADE",
     })
-    @JoinColumn()
     user!: User;
   }
   

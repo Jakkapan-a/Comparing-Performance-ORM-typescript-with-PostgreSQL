@@ -1,8 +1,9 @@
 // test/prisma/oneToOne.test.ts
 
 // One to One relationship test
-import { getMemoryUsageMB, prisma, setupQueryCounter } from "../prisma/config";
+import { prisma, setupQueryCounter } from "../prisma/config";
 import { faker } from "@faker-js/faker";
+import { getMemoryUsageMB } from "../utils/memory";
 
 const RUN_ROWS = [100, 1000, 5000];
 // const RUN_ROWS = [1];
