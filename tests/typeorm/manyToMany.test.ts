@@ -16,8 +16,8 @@ const setupQueryCounter = () => {
   return () => queryCount;
 };
 
-const RUN_ROWS = [100, 1000, 5000];
-// const RUN_ROWS = [1];
+// const RUN_ROWS = [100, 1000, 5000];
+const RUN_ROWS = [1];
 
 describe("Many to Many: User - Group (TypeORM)", () => {
   let groupEntities: Group[] = [];
@@ -118,7 +118,7 @@ describe("Many to Many: User - Group (TypeORM)", () => {
         console.log(`--- DELETE (${rows}) ---`);
         console.time(`Delete ${rows} users`);
 
-        await userRepo.clear();
+        await userRepo.delete({});
         const remaining = await userRepo.count();
 
         console.timeEnd(`Delete ${rows} users`);

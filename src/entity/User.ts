@@ -1,7 +1,8 @@
 // src/entity/User.ts
 import {
     Entity, PrimaryGeneratedColumn, Column,
-    OneToMany, OneToOne, JoinColumn, ManyToMany
+    OneToMany, OneToOne, JoinColumn, ManyToMany,
+    JoinTable
   } from "typeorm";
   import { Post } from "./Post";
   import { Profile } from "./Profile";
@@ -26,6 +27,7 @@ import {
     profile!: Profile;
   
     @ManyToMany(() => Group, group => group.users, { cascade: true })
+    @JoinTable()
     groups!: Group[];
   }
   
