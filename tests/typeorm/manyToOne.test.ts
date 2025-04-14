@@ -4,6 +4,7 @@ import { AppDataSource } from "../../src/data-source";
 import { User } from "../../src/entity/User";
 import { Post } from "../../src/entity/Post";
 import { Category } from "../../src/entity/Category";
+import { getMemoryUsageMB } from "../utils/memory";
 
 let queryCount = 0;
 const setupQueryCounter = () => {

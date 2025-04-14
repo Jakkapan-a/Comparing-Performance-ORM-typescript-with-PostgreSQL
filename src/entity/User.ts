@@ -22,8 +22,10 @@ import {
     @OneToMany(() => Post, post => post.author, { cascade: true , eager: true})
     posts!: Post[];
   
-    @OneToOne(() => Profile, profile => profile.user, { cascade: true, eager: true })
-    @JoinColumn()
+    @OneToOne(() => Profile, (profile) => profile.user, {
+      cascade: true,
+      eager: true,
+    })
     profile!: Profile;
   
     @ManyToMany(() => Group, group => group.users, { cascade: true })

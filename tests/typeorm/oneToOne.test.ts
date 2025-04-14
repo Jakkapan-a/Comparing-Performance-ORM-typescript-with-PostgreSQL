@@ -145,8 +145,9 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
           console.log(`Query Count: ${queryCounter()}`);
           console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
-          expect(remainingUsers).toBe(0);
-          expect(remainingProfiles).toBe(0);
+          expect(remainingUsers).toBeLessThanOrEqual(0);
+          expect(remainingProfiles).toBeLessThanOrEqual(0);
+          
         }, 100000);
       });
     });
