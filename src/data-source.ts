@@ -42,6 +42,6 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   logging: false,
   // logging: ["query", "error"],
-  logger: new MyLogger(),
+  // logger: new MyLogger(),
   entities: [User, Profile, Post, Group, Category],
 });
