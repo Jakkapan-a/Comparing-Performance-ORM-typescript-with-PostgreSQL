@@ -11,7 +11,7 @@ let queryCount = 0;
 
 export const logging = (sql: string, timing?: any) => {
   queryCount++;
-  console.log(`[SQL ${queryCount}]`, sql);
+  // console.log(`[SQL ${queryCount}]`, sql);
 };
 
 export const resetQueryCount = () => (queryCount = 0);

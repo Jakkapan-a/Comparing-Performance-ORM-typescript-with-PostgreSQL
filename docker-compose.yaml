@@ -12,6 +12,8 @@ services:
       # TS_TUNE_MAX_CONNS: 100
     volumes:
       - ./data:/var/lib/postgresql/data
+      # - ./pg_log:/var/lib/postgresql/data/log
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
     ports:
       - "6433:5432"
 

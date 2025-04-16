@@ -11,7 +11,7 @@ const RUN_ROWS = [1];
 describe("Many to Many: User - Group (Sequelize)", () => {
   beforeAll(async () => {
     await sequelize.query(`CREATE SCHEMA IF NOT EXISTS db_sequelize_test`);
-    await sequelize.sync({ schema: "db_sequelize_test", force: true });
+    await sequelize.sync({ schema: "db_sequelize_test", force: false });
     resetQueryCount();
   });
 

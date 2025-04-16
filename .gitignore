@@ -9,3 +9,5 @@ prisma/.env.local
 prisma/migrations/*
 prisma/generate*
 .idea
+output
+pg_log
