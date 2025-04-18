@@ -24,7 +24,7 @@ async function summarizeIOResults() {
       sum(total_exec_time) AS total_exec_time,
       count(*) AS total_queries
     FROM pg_stat_statements
-    WHERE query LIKE '%db_sequelize_test%' -- ปรับตาม schema ของคุณ
+    WHERE query LIKE '%db_test%'
     GROUP BY query
     ORDER BY total_exec_time DESC
     LIMIT 20;
