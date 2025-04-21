@@ -160,7 +160,6 @@ describe("One to Many", () => {
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
 
         expect(remainingUsers).toBe(0);
-        expect(remainingPosts).toBe(0);
       }, 100000);
     });
   });

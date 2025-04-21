@@ -5,14 +5,25 @@ export const prisma = new PrismaClient({
     { emit: 'event', level: 'query' },
   ],
 });
+let queryCount = 0;
 
+prisma.$on('query', (e) => {
+  // console.log(`Query: ${e.query} , Params: ${e.params} , Duration: ${e.duration}ms`);
+  queryCount++;
+});
 export const setupQueryCounter = () => {
-  let queryCount = 0;
-  prisma.$on('query', () => {
-    queryCount++;
-  });
+  queryCount = 0;
   return () => queryCount;
 };
+
+// export const setupQueryCounter = () => {
+//   let queryCount = 0;
+//   prisma.$on('query', (e) => {
+//     console.log(`Query: ${e.query} , Params: ${e.params} , Duration: ${e.duration}ms`);
+//     queryCount++;
+//   });
+//   return () => queryCount;
+// };
 
 
 
