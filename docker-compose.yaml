@@ -12,24 +12,32 @@ services:
       # TS_TUNE_MAX_CONNS: 100
     volumes:
       - ./data:/var/lib/postgresql/data
-      # - ./pg_log:/var/lib/postgresql/data/log
-      - ./postgresql.conf:/etc/postgresql/postgresql.conf:ro
     ports:
       - "6433:5432"
 
-  # app:
-  #   build: 
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   container_name: orm_test_app
-  #   restart: always
-  #   depends_on:
-  #     - db_test
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         cpus: '1'
-  #         memory: 1G
-  #   volumes:
-  #     - .:/app
-  #   working_dir: /app
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: orm_test_app
+    restart: always
+    depends_on:
+      - db_test
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+    volumes:
+      # - .:/app
+      - ./src:/app/src
+      - ./tests:/app/tests
+      - ./output:/app/output
+      - ./prisma:/app/prisma
+      - ./package.json:/app/package.json
+      - ./jest.config.js:/app/jest.config.js
+      - ./.env:/app/.env
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./runWithMetrics.ts:/app/runWithMetrics.ts
+      - ./summarizeIO.ts:/app/summarizeIO.ts
+    working_dir: /app

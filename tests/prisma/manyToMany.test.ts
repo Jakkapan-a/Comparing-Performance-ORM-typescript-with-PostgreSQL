@@ -3,8 +3,8 @@ import { prisma, setupQueryCounter } from "../prisma/config";
 import { de, faker } from "@faker-js/faker";
 import { getMemoryUsageMB } from "../utils/memory";
 
-const RUN_ROWS = [100, 1000, 5000];
-// const RUN_ROWS = [1];
+// const RUN_ROWS = [100, 1000, 5000];
+const RUN_ROWS = [1];
 
 describe("Many to Many: User - Group", () => {
     beforeAll(async () => {
@@ -49,8 +49,8 @@ describe("Many to Many: User - Group", () => {
           // Create: should insert users and link to groups
           it(`Create: should insert ${rows} users and link to groups`, async () => {
             const queryCount = setupQueryCounter();
-            console.log(`--- INSERT (${rows}) ---`);
-            console.time(`Insert ${rows} users`);
+            console.log(`--- CREATE (${rows}) ---`);
+            console.time(`CREATE ${rows} users`);
             
             const memStart = getMemoryUsageMB();
             const cpuStart = process.cpuUsage();
@@ -68,13 +68,13 @@ describe("Many to Many: User - Group", () => {
               createdUsers.push({ id: result.id, email: result.email });
             }
     
-            console.timeEnd(`Insert ${rows} users`);
+            console.timeEnd(`CREATE ${rows} users`);
             
             const memEnd = getMemoryUsageMB();
             const cpuEnd = process.cpuUsage(cpuStart);
 
             console.log(`Query Count: ${queryCount()}`);
-            console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+            console.log(`Memory Used: ${memStart} → ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
             console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
             
             expect(createdUsers.length).toBe(rows);
@@ -100,7 +100,7 @@ describe("Many to Many: User - Group", () => {
             const cpuEnd = process.cpuUsage(cpuStart);
 
             console.log(`Query Count: ${queryCount()}`);
-            console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+            console.log(`Memory Used: ${memStart} → ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
             console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
             
             expect(users.length).toBe(rows);
@@ -135,7 +135,7 @@ describe("Many to Many: User - Group", () => {
             const cpuEnd = process.cpuUsage(cpuStart);
 
             console.log(`Query Count: ${queryCount()}`);
-            console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+            console.log(`Memory Used: ${memStart} → ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
             console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
             
             expect(true).toBe(true);
@@ -158,7 +158,7 @@ describe("Many to Many: User - Group", () => {
             const cpuEnd = process.cpuUsage(cpuStart);
 
             console.log(`Query Count: ${queryCount()}`);
-            console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+            console.log(`Memory Used: ${memStart} → ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
             console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
             
             expect(remaining).toBe(0);

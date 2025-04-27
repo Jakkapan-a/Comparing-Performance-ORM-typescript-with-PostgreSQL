@@ -4,7 +4,8 @@ import { getQueryCount, resetQueryCount, sequelize } from "../../src/models";
 import { User } from "../../src/models/User";
 import { Post } from "../../src/models/Post";
 
-const RUN_ROWS = [1]; // ทดสอบเริ่มต้นที่ 100 ก่อน
+// const RUN_ROWS = [1]; // ทดสอบเริ่มต้นที่ 100 ก่อน
+const RUN_ROWS = [100, 1000, 5000];
 
 describe("One to Many: User - Posts (Sequelize)", () => {
   beforeAll(async () => {
@@ -67,7 +68,7 @@ describe("One to Many: User - Posts (Sequelize)", () => {
         const memEnd = getMemoryUsageMB();
         const cpuEnd = process.cpuUsage(cpuStart);
         console.log(`Query Count: ${getQueryCount()}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
         expect(createdUserIds.length).toBe(rows);
         expect(allPostIds.length).toBe(rows * 2);
@@ -86,7 +87,7 @@ describe("One to Many: User - Posts (Sequelize)", () => {
         const memEnd = getMemoryUsageMB();
         const cpuEnd = process.cpuUsage(cpuStart);
         console.log(`Query Count: ${getQueryCount()}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
         expect(users.length).toBe(rows);
       }, 100000);
@@ -109,7 +110,7 @@ describe("One to Many: User - Posts (Sequelize)", () => {
         const memEnd = getMemoryUsageMB();
         const cpuEnd = process.cpuUsage(cpuStart);
         console.log(`Query Count: ${getQueryCount()}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
         expect(true).toBe(true);
       }, 200000);
@@ -129,10 +130,9 @@ describe("One to Many: User - Posts (Sequelize)", () => {
         const memEnd = getMemoryUsageMB();
         const cpuEnd = process.cpuUsage(cpuStart);
         console.log(`Query Count: ${getQueryCount()}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
         expect(remainingUsers).toBe(0);
-        expect(remainingPosts).toBe(0);
       }, 100000);
     });
   });

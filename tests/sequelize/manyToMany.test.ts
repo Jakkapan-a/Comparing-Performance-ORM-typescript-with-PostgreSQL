@@ -5,8 +5,8 @@ import { User } from "../../src/models/User";
 import { Group } from "../../src/models/Group";
 import { getMemoryUsageMB } from "../utils/memory";
 
-// const RUN_ROWS = [100, 1000, 5000];
-const RUN_ROWS = [1];
+// const RUN_ROWS = [1];
+const RUN_ROWS = [100, 1000, 5000];
 
 describe("Many to Many: User - Group (Sequelize)", () => {
   beforeAll(async () => {
@@ -67,8 +67,8 @@ describe("Many to Many: User - Group (Sequelize)", () => {
         const memEnd = getMemoryUsageMB();
         const cpuEnd = process.cpuUsage(cpuStart);
         const queryCount = getQueryCount();
-        console.log(`Query Count: ${queryCount}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Query Count: ${getQueryCount()}`);
+        console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
         expect(createdUsers.length).toBe(rows);
       }, 300000);
@@ -109,8 +109,8 @@ describe("Many to Many: User - Group (Sequelize)", () => {
         const memEnd = getMemoryUsageMB();
         const cpuEnd = process.cpuUsage(cpuStart);
         const queryCount = getQueryCount();
-        console.log(`Query Count: ${queryCount}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Query Count: ${getQueryCount()}`);
+        console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
         expect(true).toBe(true);
       }, 300000);
@@ -127,9 +127,8 @@ describe("Many to Many: User - Group (Sequelize)", () => {
         console.timeEnd(`Delete ${rows} users`);
         const memEnd = getMemoryUsageMB();
         const cpuEnd = process.cpuUsage(cpuStart);
-        const queryCount = getQueryCount();
-        console.log(`Query Count: ${queryCount}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Query Count: ${getQueryCount()}`);
+        console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
         expect(remaining).toBe(0);
       }, 300000);

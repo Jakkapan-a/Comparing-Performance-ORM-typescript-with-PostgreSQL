@@ -1,11 +1,11 @@
 import { faker } from "@faker-js/faker";
 import { AppDataSource } from "../../src/data-source";
 import { User } from "../../src/entity/User";
-import { Profile } from "../../src/entity/Profile";
+// import { Profile } from "../../src/entity/Profile";
 import { getMemoryUsageMB } from "../utils/memory";
 
-const RUN_ROWS = [100, 1000, 5000];
-// const RUN_ROWS = [1];
+// const RUN_ROWS = [100, 1000, 5000];
+const RUN_ROWS = [1];
 
 let queryCount = 0;
 const setupQueryCounter = () => {
@@ -22,7 +22,7 @@ const setupQueryCounter = () => {
 describe("One-to-One: User - Profile (TypeORM)", () => {
     beforeAll(async () => {
       await AppDataSource.initialize();
-      await AppDataSource.getRepository(Profile).delete({});
+    //   await AppDataSource.getRepository(Profile).delete({});
       await AppDataSource.getRepository(User).delete({});
     });
   
@@ -35,7 +35,6 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
         const fakeUsers: {
           name: string;
           email: string;
-          profile: { bio: string };
         }[] = [];
   
         const userIds: number[] = [];
@@ -45,7 +44,6 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
             fakeUsers.push({
               name: faker.person.fullName(),
               email: `${i}_${faker.internet.email()}`,
-              profile: { bio: faker.lorem.paragraph() },
             });
           }
         });
@@ -59,13 +57,11 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
           console.time(`Insert ${rows} users + profiles`);
   
           const userRepo = AppDataSource.getRepository(User);
-          const profileRepo = AppDataSource.getRepository(Profile);
   
           for (let user of fakeUsers) {
             const entity = userRepo.create({
               name: user.name,
               email: user.email,
-              profile: profileRepo.create({ bio: user.profile.bio }),
             });
             const saved = await userRepo.save(entity);
             userIds.push(saved.id);
@@ -109,13 +105,9 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
           console.log(`--- UPDATE (${rows}) ---`);
           console.time(`Update ${rows} profiles`);
   
-          const profileRepo = AppDataSource.getRepository(Profile);
-          const profiles = await profileRepo.find();
-  
-          for (let profile of profiles) {
-            await profileRepo.update(profile.id, {
-              bio: `Updated bio: ${faker.lorem.sentence()}`,
-            });
+          const userRepo = AppDataSource.getRepository(User);
+          for (const id of userIds) {
+            await userRepo.update(id, { name: faker.person.fullName() });
           }
   
           console.timeEnd(`Update ${rows} profiles`);
@@ -137,7 +129,6 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
   
           await AppDataSource.getRepository(User).delete({});
           const remainingUsers = await AppDataSource.getRepository(User).count();
-          const remainingProfiles = await AppDataSource.getRepository(Profile).count();
   
           console.timeEnd(`Delete ${rows} users`);
           const memEnd = getMemoryUsageMB();
@@ -146,8 +137,6 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
           console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
           expect(remainingUsers).toBeLessThanOrEqual(0);
-          expect(remainingProfiles).toBeLessThanOrEqual(0);
-          
         }, 100000);
       });
     });

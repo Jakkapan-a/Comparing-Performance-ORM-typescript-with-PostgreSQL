@@ -1,15 +1,19 @@
-# ใช้ Node.js Alpine ที่มีขนาดเล็ก
-FROM node:22.14.0-alpine3.20
 
-# ตั้งค่า Working Directory
+# FROM node:22.14.0-slim
+FROM node:22.14-alpine3.21
+
 WORKDIR /app
 
-# คัดลอกไฟล์ package.json และติดตั้ง Dependencies
-COPY package.json /app
-RUN npm install
+# RUN apt-get update -y && \
+#     apt-get install -y openssl libssl-dev && \
+#     rm -rf /var/lib/apt/lists/*
 
-# คัดลอกไฟล์โปรเจคทั้งหมด
-COPY . /app
+COPY package*.json ./
+RUN npm install --save-dev --legacy-peer-deps
+RUN npm install -g prisma --unsafe-perm
 
-# ตั้งค่าให้ Container รันตลอดเวลา
+COPY . .
+
+RUN npx prisma generate
+
 CMD ["tail", "-f", "/dev/null"]

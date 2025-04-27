@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 const client = new Client({
-  host: "localhost",
+  host: "192.168.1.36",
   port: 6433,
   user: "postgres",
   password: "postgres",
@@ -24,7 +24,7 @@ async function summarizeIOResults() {
       sum(total_exec_time) AS total_exec_time,
       count(*) AS total_queries
     FROM pg_stat_statements
-    WHERE query LIKE '%db_test%'
+    WHERE query LIKE '%db_sequelize_test%'
     GROUP BY query
     ORDER BY total_exec_time DESC
     LIMIT 20;

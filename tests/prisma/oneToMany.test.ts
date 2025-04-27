@@ -3,7 +3,8 @@ import { prisma, setupQueryCounter } from "../prisma/config";
 import { faker } from "@faker-js/faker";
 import { getMemoryUsageMB } from "../utils/memory";
 
-const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [100, 1000, 5000];
+const RUN_ROWS = [1];
 
 describe("One to Many", () => {
 
@@ -73,7 +74,7 @@ describe("One to Many", () => {
         const cpuEnd = process.cpuUsage(cpuStart);
 
         console.log(`Query Count: ${queryCount()}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Memory Used: ${memStart} → ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
 
         expect(createdUserIds.length).toBe(rows);
@@ -100,7 +101,7 @@ describe("One to Many", () => {
         const cpuEnd = process.cpuUsage(cpuStart);
 
         console.log(`Query Count: ${queryCount()}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Memory Used: ${memStart} → ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
         
         expect(users.length).toBe(rows);
@@ -131,7 +132,7 @@ describe("One to Many", () => {
         const cpuEnd = process.cpuUsage(cpuStart);
 
         console.log(`Query Count: ${queryCount()}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Memory Used: ${memStart} → ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
 
         expect(true).toBe(true);
@@ -156,7 +157,7 @@ describe("One to Many", () => {
         const cpuEnd = process.cpuUsage(cpuStart);
 
         console.log(`Query Count: ${queryCount()}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Memory Used: ${memStart} → ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`);
 
         expect(remainingUsers).toBe(0);

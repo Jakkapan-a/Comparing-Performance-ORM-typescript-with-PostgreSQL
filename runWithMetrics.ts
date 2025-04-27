@@ -37,7 +37,7 @@ exec(`npx jest --runInBand ${testFile}`, (error, stdout, stderr) => {
       totalMem: `${(os.totalmem() / 1024 / 1024).toFixed(0)} MB`,
     },
     output: stdout,
-    error: stderr || error?.message,
+    logs: stderr || error?.message,
     timestamp: new Date().toISOString(),
   };
   const dateTimeFilename = new Date().toISOString().replace(/:/g, "-").replace("T", "_").split(".")[0];

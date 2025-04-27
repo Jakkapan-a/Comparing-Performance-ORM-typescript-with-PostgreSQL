@@ -36,7 +36,7 @@ class MyLogger implements Logger {
 
 export const AppDataSource = new DataSource({
   type: "postgres",
-  url: "postgresql://postgres:postgres@127.0.0.1:6433/mydb",
+  url: "postgresql://postgres:postgres@192.168.1.36:6433/mydb",
   schema: "db_typeorm_test",
   port: 6433,
   synchronize: true,

@@ -1,5 +1,5 @@
 // tests/prisma/config.ts
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 export const prisma = new PrismaClient({
   log: [
     { emit: 'event', level: 'query' },
@@ -7,8 +7,8 @@ export const prisma = new PrismaClient({
 });
 let queryCount = 0;
 
-prisma.$on('query', (e) => {
-  // console.log(`Query: ${e.query} , Params: ${e.params} , Duration: ${e.duration}ms`);
+prisma.$on('query',  (e) => {
+  console.log(`Query: ${e.query} , Params: ${e.params} , Duration: ${e.duration}ms`);
   queryCount++;
 });
 export const setupQueryCounter = () => {

@@ -3,10 +3,10 @@ import { faker } from "@faker-js/faker";
 import { getMemoryUsageMB } from "../utils/memory";
 import { getQueryCount, resetQueryCount, sequelize } from "../../src/models";
 import { User } from "../../src/models/User";
-import { Profile } from "../../src/models/Profile";
+// import { Profile } from "../../src/models/Profile";
 
-// const RUN_ROWS = [1];
-const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [100, 1000, 5000];
+const RUN_ROWS = [1];
 
 describe("One-to-One: User - Profile (Sequelize)", () => {
   beforeAll(async () => {
@@ -21,7 +21,7 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
 
   RUN_ROWS.forEach((rows) => {
     describe(`CRUD: ${rows} users with profiles`, () => {
-      const fakeUsers: { name: string; email: string; profile: { bio: string } }[] = [];
+      const fakeUsers: { name: string; email: string; }[] = [];
       const userIds: number[] = [];
 
       beforeAll(() => {
@@ -29,7 +29,6 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
           fakeUsers.push({
             name: faker.person.fullName(),
             email: `${i}_${faker.internet.email()}`,
-            profile: { bio: faker.lorem.paragraph() },
           });
         }
       });
@@ -46,9 +45,7 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
             {
               name: user.name,
               email: user.email,
-              profile: user.profile,
             },
-            { include: [Profile] }
           );
           userIds.push(created.id);
         }
@@ -69,7 +66,7 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
         const cpuStart = process.cpuUsage();
         console.time(`Read ${rows} users + profiles`);
 
-        const users = await User.findAll({ include: [Profile] });
+        const users = await User.findAll();
 
         console.timeEnd(`Read ${rows} users + profiles`);
         const memEnd = getMemoryUsageMB();
@@ -88,10 +85,7 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
         console.time(`Update ${rows} profiles`);
 
         for (const id of userIds) {
-          const profile = await Profile.findOne({ where: { userId: id } });
-          if (profile) {
-            await profile.update({ bio: `Updated bio: ${faker.lorem.sentence()}` });
-          }
+            await User.update({ name: faker.person.fullName() }, { where: { id } });
         }
 
         console.timeEnd(`Update ${rows} profiles`);
@@ -112,7 +106,6 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
 
         await User.destroy({ where: {} });
         const remainingUsers = await User.count();
-        const remainingProfiles = await Profile.count();
 
         console.timeEnd(`Delete ${rows} users`);
         const memEnd = getMemoryUsageMB();
@@ -121,7 +114,6 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
         console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
         expect(remainingUsers).toBe(0);
-        expect(remainingProfiles).toBe(0);
       }, 100000);
     });
   });

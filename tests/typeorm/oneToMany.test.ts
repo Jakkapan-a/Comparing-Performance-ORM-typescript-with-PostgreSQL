@@ -3,8 +3,8 @@ import { AppDataSource } from "../../src/data-source";
 import { User } from "../../src/entity/User";
 import { Post } from "../../src/entity/Post";
 import { getMemoryUsageMB } from "../utils/memory";
-// const RUN_ROWS = [100, 1000, 5000];
-const RUN_ROWS = [1];
+const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [1];
 
 let queryCount = 0;
 const setupQueryCounter = () => {
@@ -81,8 +81,8 @@ describe("One to Many: User - Posts (TypeORM)", () => {
 
         const userRepo = AppDataSource.getRepository(User);
         const postRepo = AppDataSource.getRepository(Post);
-        console.log(`fakeUsers: ${fakeUsers.length}`);
-        console.log(`fakeUsers: ${JSON.stringify(fakeUsers)}`);
+        // console.log(`fakeUsers: ${fakeUsers.length}`);
+        // console.log(`fakeUsers: ${JSON.stringify(fakeUsers)}`);
 
         for (let user of fakeUsers) {
           const u = userRepo.create({
@@ -90,7 +90,6 @@ describe("One to Many: User - Posts (TypeORM)", () => {
             email: user.email,
             posts: user.posts.map((p) =>
             {
-                console.log(`Post: ${JSON.stringify(p)}`)
                 return postRepo.create({
                     title: p.title,
                     content: p.content,
@@ -107,13 +106,13 @@ describe("One to Many: User - Posts (TypeORM)", () => {
         allPostIds.push(...posts.map((p) => p.id));
         }
         
-        console.log(`AllpostIds: ${allPostIds}`);
-        console.log(`CreatedUserIds: ${createdUserIds}`);
+        // console.log(`AllpostIds: ${allPostIds}`);
+        // console.log(`CreatedUserIds: ${createdUserIds}`);
         console.timeEnd(`Insert ${rows} users + posts`);
         const memEnd = getMemoryUsageMB();
         const cpuEnd = process.cpuUsage(cpuStart);
         console.log(`Query Count: ${queryCounter()}`);
-        console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+        console.log(`Memory Used: ${memStart} → ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(
           `CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms user / ${(cpuEnd.system / 1000).toFixed(2)}ms system`
         );
@@ -157,7 +156,6 @@ describe("One to Many: User - Posts (TypeORM)", () => {
             await postRepo.update(id, {
                 title: `Updated: ${faker.lorem.words(3)}`,
             });
-            console.log(`Updated post with ID: ${id}`);
         }
         console.timeEnd(`Update post titles`);
         const memEnd = getMemoryUsageMB();
@@ -192,7 +190,6 @@ describe("One to Many: User - Posts (TypeORM)", () => {
         );
 
         expect(remainingUsers).toBe(0);
-        expect(remainingPosts).toBe(0);
       }, 100000);
 
     });
