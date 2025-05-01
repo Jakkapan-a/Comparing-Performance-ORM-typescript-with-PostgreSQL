@@ -4,14 +4,17 @@ import { User } from "../../src/entity/User";
 import { Profile } from "../../src/entity/Profile";
 import { getMemoryUsageMB } from "../utils/memory";
 
-const RUN_ROWS = [100, 1000, 5000];
-// const RUN_ROWS = [1];
+// const RUN_ROWS = [100, 1000, 5000];
+const RUN_ROWS = [1];
 
 let queryCount = 0;
 const setupQueryCounter = () => {
   queryCount = 0;
   const logger = {
-    logQuery: () => queryCount++,
+    logQuery: (query: string, parameters?: any[], ) => {
+      queryCount++;
+      console.log(`Query: ${query}, Params: ${parameters}`);
+    },
     log: () => {},
   };
   (AppDataSource as any).logger = logger;
@@ -75,7 +78,7 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
           const memEnd = getMemoryUsageMB();
           const cpuEnd = process.cpuUsage(cpuStart);
           console.log(`Query Count: ${queryCounter()}`);
-          console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+          console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
           expect(userIds.length).toBe(rows);
         }, 100000);
@@ -96,7 +99,7 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
           const memEnd = getMemoryUsageMB();
           const cpuEnd = process.cpuUsage(cpuStart);
           console.log(`Query Count: ${queryCounter()}`);
-          console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+          console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
           expect(users.length).toBe(rows);
         }, 100000);
@@ -122,7 +125,7 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
           const memEnd = getMemoryUsageMB();
           const cpuEnd = process.cpuUsage(cpuStart);
           console.log(`Query Count: ${queryCounter()}`);
-          console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+          console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
           expect(true).toBe(true);
         }, 100000);
@@ -143,7 +146,7 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
           const memEnd = getMemoryUsageMB();
           const cpuEnd = process.cpuUsage(cpuStart);
           console.log(`Query Count: ${queryCounter()}`);
-          console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+          console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
           expect(remainingUsers).toBeLessThanOrEqual(0);
           expect(remainingProfiles).toBeLessThanOrEqual(0);

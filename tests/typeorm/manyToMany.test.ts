@@ -4,23 +4,24 @@ import { User } from "../../src/entity/User";
 import { Group } from "../../src/entity/Group";
 import { getMemoryUsageMB } from "../utils/memory";
 
+// const RUN_ROWS = [100, 1000, 5000];
+const RUN_ROWS = [1];
+
 let queryCount = 0;
 const setupQueryCounter = () => {
   queryCount = 0;
   const logger = {
-    logQuery: () => queryCount++,
-    logQueryError: () => {},
-    logQuerySlow: () => {},
-    logSchemaBuild: () => {},
-    logMigration: () => {},
+    logQuery: (query: string, parameters?: any[], ) => {
+      queryCount++;
+      console.log(`Query: ${query}, Params: ${parameters}`);
+    },
     log: () => {},
   };
   (AppDataSource as any).logger = logger;
   return () => queryCount;
 };
 
-const RUN_ROWS = [100, 1000, 5000];
-// const RUN_ROWS = [1];
+
 
 describe("Many to Many: User - Group (TypeORM)", () => {
   let groupEntities: Group[] = [];

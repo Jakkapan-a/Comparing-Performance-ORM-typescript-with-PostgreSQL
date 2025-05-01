@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 import { AppDataSource } from "../../src/data-source";
 import { User } from "../../src/entity/User";
-// import { Profile } from "../../src/entity/Profile";
 import { getMemoryUsageMB } from "../utils/memory";
+import { In } from "typeorm";
 
 // const RUN_ROWS = [100, 1000, 5000];
 const RUN_ROWS = [1];
@@ -11,7 +11,10 @@ let queryCount = 0;
 const setupQueryCounter = () => {
   queryCount = 0;
   const logger = {
-    logQuery: () => queryCount++,
+    logQuery: (query: string, parameters?: any[], ) => {
+        queryCount++;
+        console.log(`Query: ${query}, Params: ${parameters}`);
+    },
     log: () => {},
   };
   (AppDataSource as any).logger = logger;
@@ -19,10 +22,10 @@ const setupQueryCounter = () => {
 };
 
 
-describe("One-to-One: User - Profile (TypeORM)", () => {
+describe("Single Table: User (TypeORM)", 
+    () => {
     beforeAll(async () => {
       await AppDataSource.initialize();
-    //   await AppDataSource.getRepository(Profile).delete({});
       await AppDataSource.getRepository(User).delete({});
     });
   
@@ -31,7 +34,7 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
     });
   
     RUN_ROWS.forEach((rows) => {
-      describe(`CRUD: ${rows} users with profiles`, () => {
+      describe(`CRUD: ${rows} users`, () => {
         const fakeUsers: {
           name: string;
           email: string;
@@ -48,13 +51,13 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
           }
         });
   
-        it(`Create: should insert ${rows} users with profiles`, async () => {
+        it(`Create: should insert ${rows} users`, async () => {
           const queryCounter = setupQueryCounter();
           const memStart = getMemoryUsageMB();
           const cpuStart = process.cpuUsage();
   
           console.log(`--- CREATE (${rows}) ---`);
-          console.time(`Insert ${rows} users + profiles`);
+          console.time(`Insert ${rows} users`);
   
           const userRepo = AppDataSource.getRepository(User);
   
@@ -67,59 +70,60 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
             userIds.push(saved.id);
           }
   
-          console.timeEnd(`Insert ${rows} users + profiles`);
+          console.timeEnd(`Insert ${rows} users`);
           const memEnd = getMemoryUsageMB();
           const cpuEnd = process.cpuUsage(cpuStart);
           console.log(`Query Count: ${queryCounter()}`);
-          console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+          console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
           expect(userIds.length).toBe(rows);
         }, 100000);
   
-        it(`Read: should fetch all ${rows} users with profiles`, async () => {
+        it(`Read: should fetch all ${rows} users`, async () => {
           const queryCounter = setupQueryCounter();
           const memStart = getMemoryUsageMB();
           const cpuStart = process.cpuUsage();
   
           console.log(`--- READ (${rows}) ---`);
-          console.time(`Read ${rows} users + profiles`);
+          console.time(`Read ${rows} users`);
   
           const users = await AppDataSource.getRepository(User).find({
-            relations: ["profile"],
+            where: { email: In(fakeUsers.map((user) => user.email)) },
+            order: { id: "ASC" },
           });
   
-          console.timeEnd(`Read ${rows} users + profiles`);
+          console.timeEnd(`Read ${rows} users`);
           const memEnd = getMemoryUsageMB();
           const cpuEnd = process.cpuUsage(cpuStart);
           console.log(`Query Count: ${queryCounter()}`);
-          console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+          console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
           expect(users.length).toBe(rows);
         }, 100000);
   
-        it(`Update: should update profile bio for all users`, async () => {
+        it(`Update: should update users`, async () => {
           const queryCounter = setupQueryCounter();
           const memStart = getMemoryUsageMB();
           const cpuStart = process.cpuUsage();
   
           console.log(`--- UPDATE (${rows}) ---`);
-          console.time(`Update ${rows} profiles`);
+          console.time(`Update ${rows} users`);
   
           const userRepo = AppDataSource.getRepository(User);
           for (const id of userIds) {
             await userRepo.update(id, { name: faker.person.fullName() });
           }
   
-          console.timeEnd(`Update ${rows} profiles`);
+          console.timeEnd(`Update ${rows} users`);
           const memEnd = getMemoryUsageMB();
           const cpuEnd = process.cpuUsage(cpuStart);
           console.log(`Query Count: ${queryCounter()}`);
-          console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+          console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
           expect(true).toBe(true);
         }, 100000);
   
-        it(`Delete: should delete all users (and cascade profiles)`, async () => {
+        it(`Delete: should delete all users`, async () => {
           const queryCounter = setupQueryCounter();
           const memStart = getMemoryUsageMB();
           const cpuStart = process.cpuUsage();
@@ -134,7 +138,7 @@ describe("One-to-One: User - Profile (TypeORM)", () => {
           const memEnd = getMemoryUsageMB();
           const cpuEnd = process.cpuUsage(cpuStart);
           console.log(`Query Count: ${queryCounter()}`);
-          console.log(`Memory Used: ${memStart} -> ${memEnd} MB`);
+          console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
           expect(remainingUsers).toBeLessThanOrEqual(0);
         }, 100000);

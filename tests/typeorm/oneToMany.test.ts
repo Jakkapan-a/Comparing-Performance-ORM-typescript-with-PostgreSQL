@@ -3,33 +3,21 @@ import { AppDataSource } from "../../src/data-source";
 import { User } from "../../src/entity/User";
 import { Post } from "../../src/entity/Post";
 import { getMemoryUsageMB } from "../utils/memory";
-const RUN_ROWS = [100, 1000, 5000];
-// const RUN_ROWS = [1];
+// const RUN_ROWS = [100, 1000, 5000];
+const RUN_ROWS = [1];
 
 let queryCount = 0;
 const setupQueryCounter = () => {
-    // const originalQuery = AppDataSource.driver.connect().then();
-    // // @ts-ignore
-    // queryCount = 0;
-    // // @ts-ignore
-    // AppDataSource.driver.connection.query = async function (...args: any[]) {
-    //     queryCount++;
-    //     return originalQuery;
-    // };
-    // return () => queryCount;
-    queryCount = 0;
-    const logger = {
-      logQuery: () => queryCount++,
-      logQueryError: () => {},
-      logQuerySlow: () => {},
-      logSchemaBuild: () => {},
-      logMigration: () => {},
-      log: () => {},
-    };
-  
-    (AppDataSource as any).logger = logger;
-  
-    return () => queryCount;
+  queryCount = 0;
+  const logger = {
+    logQuery: (query: string, parameters?: any[], ) => {
+      queryCount++;
+      console.log(`Query: ${query}, Params: ${parameters}`);
+    },
+    log: () => {},
+  };
+  (AppDataSource as any).logger = logger;
+  return () => queryCount;
 };
 
 
@@ -99,11 +87,7 @@ describe("One to Many: User - Posts (TypeORM)", () => {
           });
           const saved = await userRepo.save(u);
           createdUserIds.push(saved.id);
-        //   allPostIds.push(...saved.posts.map((p) => p.id));
-        const posts = await AppDataSource.getRepository(Post).find({
-            where: { author: { id: saved.id } },
-          });
-        allPostIds.push(...posts.map((p) => p.id));
+          allPostIds.push(...saved.posts.map((p) => p.id));
         }
         
         // console.log(`AllpostIds: ${allPostIds}`);
