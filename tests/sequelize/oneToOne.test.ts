@@ -5,8 +5,8 @@ import { getQueryCount, resetQueryCount, sequelize } from "../../src/models";
 import { User } from "../../src/models/User";
 import { Profile } from "../../src/models/Profile";
 
-// const RUN_ROWS = [1];
-const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [100, 1000, 5000];
+const RUN_ROWS = [1];
 
 describe("One-to-One: User - Profile (Sequelize)", () => {
   beforeAll(async () => {

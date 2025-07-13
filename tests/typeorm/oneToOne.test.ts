@@ -4,8 +4,8 @@ import { User } from "../../src/entity/User";
 import { Profile } from "../../src/entity/Profile";
 import { getMemoryUsageMB } from "../utils/memory";
 
-// const RUN_ROWS = [100, 1000, 5000];
-const RUN_ROWS = [1];
+const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [1];
 
 let queryCount = 0;
 const setupQueryCounter = () => {
@@ -13,7 +13,7 @@ const setupQueryCounter = () => {
   const logger = {
     logQuery: (query: string, parameters?: any[], ) => {
       queryCount++;
-      console.log(`Query: ${query}, Params: ${parameters}`);
+      // console.log(`Query: ${query}, Params: ${parameters}`);
     },
     log: () => {},
   };

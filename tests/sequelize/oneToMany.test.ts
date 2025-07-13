@@ -4,8 +4,8 @@ import { getQueryCount, resetQueryCount, sequelize } from "../../src/models";
 import { User } from "../../src/models/User";
 import { Post } from "../../src/models/Post";
 
-// const RUN_ROWS = [1]; // ทดสอบเริ่มต้นที่ 100 ก่อน
 const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [1];
 
 describe("One to Many: User - Posts (Sequelize)", () => {
   beforeAll(async () => {

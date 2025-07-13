@@ -49,5 +49,5 @@ exec(`npx jest --runInBand ${testFile}`, (error, stdout, stderr) => {
   }
 
   fs.writeFileSync(logFilePath, JSON.stringify(result, null, 2));
-  console.log("✅ Test complete. See performance_log.json for full results.");
+  console.log("Test complete. See performance_log.json for full results.");
 });

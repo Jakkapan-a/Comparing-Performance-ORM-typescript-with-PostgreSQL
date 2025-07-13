@@ -5,8 +5,8 @@ import { User } from "../../src/models/User";
 import { Group } from "../../src/models/Group";
 import { getMemoryUsageMB } from "../utils/memory";
 
-// const RUN_ROWS = [1];
-const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [100, 1000, 5000];
+const RUN_ROWS = [1];
 
 describe("Many to Many: User - Group (Sequelize)", () => {
   beforeAll(async () => {
@@ -44,6 +44,7 @@ describe("Many to Many: User - Group (Sequelize)", () => {
       });
 
       it(`Create: should insert ${rows} users and link to groups`, async () => {
+        console.log(`--- CREATE (${rows}) ---`);
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
         resetQueryCount();
@@ -74,6 +75,7 @@ describe("Many to Many: User - Group (Sequelize)", () => {
       }, 300000);
 
       it(`Read: should fetch all ${rows} users with groups`, async () => {
+        console.log(`--- READ (${rows}) ---`);
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
         resetQueryCount();
@@ -92,6 +94,7 @@ describe("Many to Many: User - Group (Sequelize)", () => {
       }, 300000);
 
       it(`Update: should update users' group association`, async () => {
+        console.log(`--- UPDATE (${rows}) ---`);
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
         resetQueryCount();
@@ -116,6 +119,7 @@ describe("Many to Many: User - Group (Sequelize)", () => {
       }, 300000);
 
       it(`Delete: should delete all ${rows} users`, async () => {
+        console.log(`--- DELETE (${rows}) ---`);
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
         resetQueryCount();

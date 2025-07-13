@@ -4,8 +4,8 @@ import { prisma, setupQueryCounter } from "../prisma/config";
 import { faker } from "@faker-js/faker";
 import { getMemoryUsageMB } from "../utils/memory";
 
-// const RUN_ROWS = [100, 1000, 5000];
-const RUN_ROWS = [1];
+const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [1];
 
 describe("One-to-One: User - Profile", () => {
   beforeAll(async () => {
@@ -40,6 +40,8 @@ describe("One-to-One: User - Profile", () => {
 
       it(`Create: should insert ${rows} users with profiles`, async () => {
         const queryCount = setupQueryCounter();
+        global.gc?.(); // Force garbage collection if available
+
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
         console.log(`--- CREATE (${rows}) ---`);
@@ -70,6 +72,8 @@ describe("One-to-One: User - Profile", () => {
 
       it(`Read: should fetch all ${rows} users with profiles`, async () => {
         const queryCount = setupQueryCounter();
+        global.gc?.(); // Force garbage collection if available
+
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
         console.log(`--- READ (${rows}) ---`);
@@ -90,6 +94,8 @@ describe("One-to-One: User - Profile", () => {
 
       it(`Update: should update profile bio for all users`, async () => {
         const queryCount = setupQueryCounter();
+        global.gc?.(); // Force garbage collection if available
+
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
         console.log(`--- UPDATE (${rows}) ---`);
@@ -115,6 +121,8 @@ describe("One-to-One: User - Profile", () => {
 
       it(`Delete: should delete all users (and cascade profiles)`, async () => {
         const queryCount = setupQueryCounter();
+        global.gc?.(); // Force garbage collection if available
+
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
         console.log(`--- DELETE (${rows}) ---`);

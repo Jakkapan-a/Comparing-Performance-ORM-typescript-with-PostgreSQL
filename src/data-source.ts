@@ -10,11 +10,11 @@ import { Category } from "./entity/Category";
 
 class MyLogger implements Logger {
   logQuery(query: string, parameters?: any[]) {
-    process.stdout.write(`[QUERY] ${query}\n`);
+    // process.stdout.write(`[QUERY] ${query}\n`);
 
-    if (parameters) {
-      process.stdout.write(`Parameters: ${JSON.stringify(parameters)}\n`);
-    }
+    // if (parameters) {
+    //   process.stdout.write(`Parameters: ${JSON.stringify(parameters)}\n`);
+    // }
   }
  
   logQueryError(error: string, query: string, parameters?: any[]) {

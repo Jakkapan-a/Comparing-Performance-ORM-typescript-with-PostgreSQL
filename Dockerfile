@@ -1,5 +1,3 @@
-
-# FROM node:22.14.0-slim
 FROM node:22.14-alpine3.21
 
 WORKDIR /app

@@ -5,8 +5,8 @@ import { getQueryCount, resetQueryCount, sequelize } from "../../src/models";
 import { User } from "../../src/models/User";
 // import { Profile } from "../../src/models/Profile";
 
-// const RUN_ROWS = [100, 1000, 5000];
-const RUN_ROWS = [1];
+const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [1];
 
 describe("One-to-One: User - Profile (Sequelize)", () => {
   beforeAll(async () => {
@@ -35,6 +35,7 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
 
       it(`Create: should insert ${rows} users with profiles`, async () => {
         resetQueryCount();
+        global.gc?.(); // Force garbage collection if available
         console.log(`--- CREATE (${rows}) ---`);
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
@@ -56,11 +57,13 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
         console.log(`Query Count: ${getQueryCount()}`);
         console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
+        global.gc?.(); // Force garbage collection if available
         expect(userIds.length).toBe(rows);
       }, 100000);
 
       it(`Read: should fetch all ${rows} users with profiles`, async () => {
         resetQueryCount();
+        global.gc?.(); // Force garbage collection if available
         console.log(`--- READ (${rows}) ---`);
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
@@ -74,11 +77,13 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
         console.log(`Query Count: ${getQueryCount()}`);
         console.log(`Memory Used: ${memStart} -> ${memEnd} MB`, `(${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
+        global.gc?.(); // Force garbage collection if available
         expect(users.length).toBe(rows);
       }, 100000);
 
       it(`Update: should update profile bio for all users`, async () => {
         resetQueryCount();
+        global.gc?.(); // Force garbage collection if available
         console.log(`--- UPDATE (${rows}) ---`);
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
@@ -94,11 +99,13 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
         console.log(`Query Count: ${getQueryCount()}`);
         console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
+        global.gc?.(); // Force garbage collection if available
         expect(true).toBe(true);
       }, 100000);
 
       it(`Delete: should delete all users (and cascade profiles)`, async () => {
         resetQueryCount();
+        global.gc?.(); // Force garbage collection if available
         console.log(`--- DELETE (${rows}) ---`);
         const memStart = getMemoryUsageMB();
         const cpuStart = process.cpuUsage();
@@ -113,6 +120,7 @@ describe("One-to-One: User - Profile (Sequelize)", () => {
         console.log(`Query Count: ${getQueryCount()}`);
         console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
         console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
+        global.gc?.(); // Force garbage collection if available
         expect(remainingUsers).toBe(0);
       }, 100000);
     });

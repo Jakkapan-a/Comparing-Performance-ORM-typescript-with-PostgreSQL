@@ -8,7 +8,7 @@ export const prisma = new PrismaClient({
 let queryCount = 0;
 
 prisma.$on('query',  (e) => {
-  console.log(`Query: ${e.query} , Params: ${e.params} , Duration: ${e.duration}ms`);
+  // console.log(`Query: ${e.query} , Params: ${e.params} , Duration: ${e.duration}ms`);
   queryCount++;
 });
 export const setupQueryCounter = () => {

@@ -4,8 +4,8 @@ import { prisma, setupQueryCounter } from "../prisma/config";
 import { de, faker } from "@faker-js/faker";
 import { getMemoryUsageMB } from "../utils/memory";
 
-// const RUN_ROWS = [100, 1000, 5000];
-const RUN_ROWS = [1];
+const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [1];
 
 describe("Single Table: User", () => {
   beforeAll(async () => {
@@ -36,6 +36,7 @@ describe("Single Table: User", () => {
       });
 
         it(`Create: should insert ${rows} users`, async () => {
+            global.gc?.(); // Force garbage collection if available 
             const queryCount = setupQueryCounter();
             const memStart = getMemoryUsageMB();
             const cpuStart = process.cpuUsage();
@@ -61,6 +62,7 @@ describe("Single Table: User", () => {
         },200000); // 200000ms = 200s
 
         it(`Read: should read ${rows} users`, async () => {
+            global.gc?.(); // Force garbage collection if available
             const queryCount = setupQueryCounter();
             const memStart = getMemoryUsageMB();
             const cpuStart = process.cpuUsage();
@@ -85,6 +87,7 @@ describe("Single Table: User", () => {
 
 
         it(`Update: should update ${rows} users`, async () => {
+            global.gc?.();
             const queryCount = setupQueryCounter();
             const memStart = getMemoryUsageMB();
             const cpuStart = process.cpuUsage();
@@ -111,6 +114,7 @@ describe("Single Table: User", () => {
         },200000); // 200000ms = 200s
 
         it(`Delete: should delete ${rows} users`, async () => {
+            global.gc?.(); // Force garbage collection if available
             const queryCount = setupQueryCounter();
             const memStart = getMemoryUsageMB();
             const cpuStart = process.cpuUsage();

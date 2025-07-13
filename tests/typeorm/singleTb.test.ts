@@ -4,8 +4,8 @@ import { User } from "../../src/entity/User";
 import { getMemoryUsageMB } from "../utils/memory";
 import { In } from "typeorm";
 
-// const RUN_ROWS = [100, 1000, 5000];
-const RUN_ROWS = [1];
+const RUN_ROWS = [100, 1000, 5000];
+// const RUN_ROWS = [1];
 
 let queryCount = 0;
 const setupQueryCounter = () => {
@@ -13,13 +13,15 @@ const setupQueryCounter = () => {
   const logger = {
     logQuery: (query: string, parameters?: any[], ) => {
         queryCount++;
-        console.log(`Query: ${query}, Params: ${parameters}`);
+        // console.log(`Query: ${query}, Params: ${parameters}`);
     },
     log: () => {},
   };
   (AppDataSource as any).logger = logger;
   return () => queryCount;
 };
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 
 
 describe("Single Table: User (TypeORM)", 
@@ -52,6 +54,7 @@ describe("Single Table: User (TypeORM)",
         });
   
         it(`Create: should insert ${rows} users`, async () => {
+          global.gc?.(); // Force garbage collection if available
           const queryCounter = setupQueryCounter();
           const memStart = getMemoryUsageMB();
           const cpuStart = process.cpuUsage();
@@ -76,10 +79,14 @@ describe("Single Table: User (TypeORM)",
           console.log(`Query Count: ${queryCounter()}`);
           console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
+          await delay(2000); // Delay to allow for garbage collection
+
           expect(userIds.length).toBe(rows);
         }, 100000);
   
         it(`Read: should fetch all ${rows} users`, async () => {
+          global.gc?.(); // Force garbage collection if available
+
           const queryCounter = setupQueryCounter();
           const memStart = getMemoryUsageMB();
           const cpuStart = process.cpuUsage();
@@ -98,10 +105,14 @@ describe("Single Table: User (TypeORM)",
           console.log(`Query Count: ${queryCounter()}`);
           console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
+          await delay(2000); // Delay to allow for garbage collection
+          global.gc?.(); // Force garbage collection if available
           expect(users.length).toBe(rows);
         }, 100000);
   
         it(`Update: should update users`, async () => {
+          global.gc?.(); // Force garbage collection if available
+
           const queryCounter = setupQueryCounter();
           const memStart = getMemoryUsageMB();
           const cpuStart = process.cpuUsage();
@@ -120,10 +131,14 @@ describe("Single Table: User (TypeORM)",
           console.log(`Query Count: ${queryCounter()}`);
           console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
+          await delay(2000); // Delay to allow for garbage collection
+          global.gc?.(); // Force garbage collection if available
           expect(true).toBe(true);
         }, 100000);
   
         it(`Delete: should delete all users`, async () => {
+          global.gc?.(); // Force garbage collection if available
+
           const queryCounter = setupQueryCounter();
           const memStart = getMemoryUsageMB();
           const cpuStart = process.cpuUsage();
@@ -140,6 +155,8 @@ describe("Single Table: User (TypeORM)",
           console.log(`Query Count: ${queryCounter()}`);
           console.log(`Memory Used: ${memStart} -> ${memEnd} MB, (${(parseFloat(memEnd) - parseFloat(memStart)).toFixed(2)} MB)`);
           console.log(`CPU Used: ${(cpuEnd.user / 1000).toFixed(2)}ms / ${(cpuEnd.system / 1000).toFixed(2)}ms`);
+          await delay(2000); // Delay to allow for garbage collection
+          global.gc?.(); // Force garbage collection if available
           expect(remainingUsers).toBeLessThanOrEqual(0);
         }, 100000);
       });
